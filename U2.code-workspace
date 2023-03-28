@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../DU3"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "PHP",
+		"editor.wordWrap": "on"
+	}
+}
