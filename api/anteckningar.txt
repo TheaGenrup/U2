@@ -3,10 +3,67 @@ frågor
 felmeddelanden? vad ska egentligen hända?
 ska man öppna den i localhost?
 ska användare ha id:n?
-hur ska man tänka krings bilderna?
 
 
 att göra:
 - dokumentation
-- uppdateras poängen när man svarar rätt?
-- ta bort .jpg från alternativen
+- highscore
+    kan inte sortera
+- maxpoäng?
+
+
+
+/* $dir = scandir("//.images");
+var_dump($dir);
+
+// print_r($dir);
+
+$alternatives = [];
+$imagesCount = count($dir);
+
+for ($i=0; $i < 4; $i++) { 
+    
+    $randomDog = rand(2, count($dir));
+    $alternativesOfDogs[] = $dir[$randomDog];
+    var_dump($alternativesOfDogs);
+} */
+
+
+$dir = scandir('../images');
+
+$alternativesOfDogs = [];
+
+for ($i=0; $i < 4 ; $i++) { 
+    $randomDog = rand(2, count($dir));
+    $alternativesOfDogs[] = $dir[$randomDog];
+
+}
+
+print_r($alternativesOfDogs);
+
+
+
+//Check for the right answer and add to newdog
+for ($i=0; $i < 4 ; $i++) { 
+    $randomDog = rand(2, count($dir));
+    $newDog = [
+        "name" => $dir[$randomDog],
+    ];
+    $alternativesOfDogs[] = $newDog;
+}
+
+
+$randomDogFromArray = array_rand($alternativesOfDogs);
+$rightanswer = "images/" . $alternativesOfDogs[$randomDogFromArray]["name"];
+
+//Fix the name in the alternatives
+$alt = [
+    "image" => $rightanswer,
+    "alternatives" => $alternativesOfDogs,
+];
+
+
+$dogs = json_encode($alt);
+sendJSON($alt);
+
+

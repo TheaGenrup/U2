@@ -19,10 +19,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $newUser["username"];
     $password = $newUser["password"];
 
-    foreach ($users as $user ) {
-        if ($user["username"] == $username) {
-            sendJSON(["message" => "Conflict (the username is already taken)"], 409);
-        }
+    if (!$users == null or !$users == []) {
+      
+      foreach ($users as $user ) {
+          if ($user["username"] == $username) {
+              sendJSON(["message" => "Conflict (the username is already taken)"], 409);
+          }
+      }
     }
 
       if ($username == "" or $password == "") {
@@ -30,19 +33,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               exit();
       }
 
-      $users[] = [
-        // "id" => getNewId($users),
+      $newUser = [
         "username" => $username,
         "password" => $password,
         "points" => 0
       ];
 
+      $users[] = $newUser;
+
       $encodedData = json_encode($users, JSON_PRETTY_PRINT);
       file_put_contents($userDatabase, $encodedData);
-      sendJSON([
-        "username" => $username,
-        "message" => "The user $username was added successfully"
-      ]);
+
+      sendJSON($newUser);
 
     }
 ?>
