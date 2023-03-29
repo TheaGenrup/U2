@@ -1,8 +1,12 @@
-frågor?
+frågor
 
 felmeddelanden? vad ska egentligen hända?
 ska man öppna den i localhost?
 ska användare ha id:n?
 hur ska man tänka krings bilderna?
 
-varför ska vi ha points.php?
+
+att göra:
+- dokumentation
+- uppdateras poängen när man svarar rätt?
+- ta bort .jpg från alternativen
