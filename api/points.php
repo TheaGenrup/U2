@@ -6,35 +6,52 @@ allowCORS();
 
 
 $method = $_SERVER["REQUEST_METHOD"];
+
 $filename = "users.json";
 
 
 $inputData = json_decode(file_get_contents("php://input"), true);
 
-$json = file_get_contents($filename);
-$userDatabase = json_decode($json, true);
 
 
+$userDatabase = json_decode(file_get_contents($filename), true);
+
+if ($method == "PUT" or $method == "HEAD" or $method == "DELETE" or $method == "PATCH"){
+      sendJSON(["message" => "Method Not Allowed (only GET and POST is allowed)"], 405);
+}
+
+
+
+// kolla om alla parametrar finns med
 if ($method == "POST") {
-        
+
+/*     if ($username = null or $username == "" or $password == null or $password == "" or $pointsToIncrement == null or $pointsToIncrement == "") {
+        sendJSON(["message" => "Please send username, password and points"], 400);
+    } */
     $username = $inputData["username"];
-    $password = $inputData["password"];
+$password = $inputData["password"];
+$pointsToIncrement = $inputData["points"];
 
     for($i = 0; $i < count($userDatabase); $i++){
 
+        
         if ($userDatabase[$i]["username"] == $username) {
-            $userDatabase[$i]["points"] = $userDatabase[$i]["points"] + $inputData["points"];
-            $newpoints = file_put_contents($filename, json_encode($userDatabase, JSON_PRETTY_PRINT));
-            sendJSON(["points" => $userDatabase[$i]["points"]]);
+
+            $currentPoints = $userDatabase[$i]["points"] += $pointsToIncrement;
+
+            file_put_contents($filename, json_encode($userDatabase, JSON_PRETTY_PRINT));
+            sendJSON(["points" => $currentPoints]);
         }
     }
 
-} 
+    sendJSON(["error" => "Can't load points"], 400);
+
+}
 
 
 if ($method == "GET") {
 
-        // Define the comparison function
+    // Define the comparison function
     function cmp($a, $b) {
         if ($a["points"] == $b["points"]) {
             return 0;
@@ -45,12 +62,23 @@ if ($method == "GET") {
     // Sort the array using the comparison function
     usort($userDatabase, "cmp");
 
-    // Shorten and send the sorted array
+    // Shorten the sorted array
     $firstFive = array_slice($userDatabase, 0, 5);
 
-    sendJSON($firstFive);
+    // Extract username and points
+    $arrayToSend = [];
+    foreach($firstFive as $user){
+        $oneUser = [
+            "username" => $user["username"],
+            "points" => $user["points"],
+        ];
+        $arrayToSend[] = $oneUser;
+    };
+
+    // Send the sorted array
+    sendJSON($arrayToSend);
+
 }
-    
 
 
 

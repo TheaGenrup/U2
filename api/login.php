@@ -8,19 +8,22 @@ $userDatabase = "users.json";
 
 $users = json_decode(file_get_contents($userDatabase), true);
 
+$inputData = json_decode(file_get_contents("php://input"), true);
+$username = $inputData["username"];
+$password = $inputData["password"];
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $inputData = json_decode(file_get_contents("php://input"), true);
-    $username = $inputData["username"];
-    $password = $inputData["password"];
-
+    if ($username == "" or $password == "") {
+        sendJSON(["message" => "Bad Request (empty values)"], 400);
+        exit();
+    }  
 
     for($i=0; $i<count($users); $i++){
         $user = $users[$i];
 
-        if ($username == $user["username"] and          $password == $user["password"]) {
+        if ($username == $user["username"] and $password == $user["password"]) {
             $points = $user["points"];
 
              $loggedInUser = [
@@ -30,11 +33,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ];
 
             sendJSON($loggedInUser);
+        } 
 
-        }
-
+            
     }  
-
+    sendJSON(["message" => "Not Found"], 404);
 } 
 
 

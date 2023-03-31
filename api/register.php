@@ -5,6 +5,15 @@ allowCORS();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+  $inputData = json_decode(file_get_contents("php://input"), true);
+  $username = $inputData["username"];
+  $password = $inputData["password"];
+  
+    if ($username == "" or $password == "") {
+          sendJSON(["message" => "Bad Request (empty values)"], 400);
+          exit();
+    }
+
     $userDatabase = "users.json";
     $users = [];
 
@@ -27,11 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           }
       }
     }
-
-      if ($username == "" or $password == "") {
-              sendJSON(["message" => "Please enter username and password"], 400);
-              exit();
-      }
 
       $newUser = [
         "username" => $username,
