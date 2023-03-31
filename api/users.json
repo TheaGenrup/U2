@@ -12,7 +12,7 @@
     {
         "username": "Ankan",
         "password": "123",
-        "points": 13
+        "points": 23
     },
     {
         "username": "Emma",
@@ -76,8 +76,8 @@
     },
     {
         "username": "Kjell",
-        "password": "hoppsan",
-        "points": 3
+        "password": "hejsanhoppsan",
+        "points": 7
     },
     {
         "username": "Andy",
@@ -88,5 +88,10 @@
         "username": "Sofie",
         "password": "123",
         "points": 0
+    },
+    {
+        "username": "Adam",
+        "password": "123",
+        "points": 1
     }
 ]

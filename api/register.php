@@ -22,11 +22,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
       $users = json_decode(file_get_contents($userDatabase), true);
     }
-
+/* 
     $newUser = json_decode(file_get_contents("php://input"), true);
 
     $username = $newUser["username"];
-    $password = $newUser["password"];
+    $password = $newUser["password"]; */
 
     if (!$users == null or !$users == []) {
       

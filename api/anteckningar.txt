@@ -1,16 +1,3 @@
-frågor
-
-felmeddelanden? vad ska egentligen hända?
-ska man öppna den i localhost?
-ska användare ha id:n?
-
-
-att göra:
-- dokumentation
-- highscore
-    kan inte sortera
-- maxpoäng?
-
 
 
 /* $dir = scandir("//.images");
