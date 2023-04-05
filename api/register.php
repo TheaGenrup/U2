@@ -22,11 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
       $users = json_decode(file_get_contents($userDatabase), true);
     }
-/* 
-    $newUser = json_decode(file_get_contents("php://input"), true);
-
-    $username = $newUser["username"];
-    $password = $newUser["password"]; */
 
     if (!$users == null or !$users == []) {
       
@@ -50,5 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       sendJSON($newUser);
 
-    }
+}
+    sendJSON(["message" => "You need to use the POST-request method"], 405);
 ?>

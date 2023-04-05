@@ -4,16 +4,16 @@
 require_once "helper_functions.php";
 
 
-$userDatabase = "users.json";
-
-$users = json_decode(file_get_contents($userDatabase), true);
-
-$inputData = json_decode(file_get_contents("php://input"), true);
-$username = $inputData["username"];
-$password = $inputData["password"];
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $userDatabase = "users.json";
+    $users = json_decode(file_get_contents($userDatabase), true);
+
+    $inputData = json_decode(file_get_contents("php://input"), true);
+    $username = $inputData["username"];
+    $password = $inputData["password"];
 
     if ($username == "" or $password == "") {
         sendJSON(["message" => "Bad Request (empty values)"], 400);
@@ -25,8 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($username == $user["username"] and $password == $user["password"]) {
             $points = $user["points"];
-
-             $loggedInUser = [
+            $loggedInUser = [
                 "username" => $username,
                 "password" => $password,
                 "points" => $points,
@@ -39,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }  
     sendJSON(["message" => "Not Found"], 404);
 } 
-
+sendJSON(["message" => "You need to use the POST-request method"], 405);
 
 
 ?> 

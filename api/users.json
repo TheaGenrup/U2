@@ -10,9 +10,14 @@
         "points": 9
     },
     {
+        "username": "Haisley",
+        "password": "123",
+        "points": 3
+    },
+    {
         "username": "Ankan",
         "password": "123",
-        "points": 23
+        "points": 27
     },
     {
         "username": "Emma",
@@ -40,7 +45,7 @@
         "points": 20
     },
     {
-        "username": "Elliott",
+        "username": "Elliot",
         "password": "123",
         "points": 7
     },
@@ -82,7 +87,7 @@
     {
         "username": "Andy",
         "password": "Hejsvejs",
-        "points": 3
+        "points": 5
     },
     {
         "username": "Sofie",
@@ -93,5 +98,15 @@
         "username": "Adam",
         "password": "123",
         "points": 1
+    },
+    {
+        "username": "Colton",
+        "password": "123",
+        "points": 0
+    },
+    {
+        "username": "Colby",
+        "password": "123",
+        "points": 0
     }
 ]

@@ -10,8 +10,9 @@ $userDatabase = "users.json";
 $inputData = json_decode(file_get_contents("php://input"), true);
 $users = json_decode(file_get_contents($userDatabase), true);
 
-if ($method == "PUT" or $method == "HEAD" or $method == "DELETE" or $method == "PATCH"){
-      sendJSON(["message" => "Method Not Allowed (only GET and POST is allowed)"], 405);
+$allowedMethods = ["POST", "GET"];
+if (!in_array($method, $allowedMethods)) {
+    sendJSON(["message" => "Only POST and GET are allowed", 405]);
 }
 
 if ($method == "POST") {
@@ -19,11 +20,6 @@ if ($method == "POST") {
     $username = $inputData["username"];
     $password = $inputData["password"];
     $pointsToIncrement = $inputData["points"];
-
-/*     if ($username = null or $username == "" or $password == null or $password == "" or $pointsToIncrement == null or $pointsToIncrement == "") {
-        var_dump($username);
-        sendJSON(["message" => "Please send username, password and points"], 400);
-    } */
 
     for($i = 0; $i < count($users); $i++){
 
@@ -37,7 +33,7 @@ if ($method == "POST") {
     }
 
     // if the user isn't found, send error
-    sendJSON(["message" => "Not Found"], 404);
+    sendJSON(["message" => "User not Found"], 404);
 
 }
 
@@ -81,74 +77,7 @@ if ($method == "GET") {
 
 }
 
-
-
-/*     $users = "users.json";
-
-    $users = json_decode(file_get_contents($users), true);
- */
-/* 
-    $newPoints = 0;
-    if (isset($_POST["points"])) {
-
-        $username = $_POST["username"];
-        $password = $_POST["password"];
-        $pointsToIncrement = $_POST["points"];
-
-        foreach ($users as $user) {
-            if ($user["username"] == $username or $user["password"] == $password) {
-                var_dump($user);
-                
-                $user["points"] = $user["points"] += $pointsToIncrement;
-                $newPoints = $user["points"] += $pointsToIncrement;
-            }
-        }
-
-    }
-    var_dump($users);
-
-    file_put_contents($users, $users);
-    sendJSON($newPoints);
- */
-
-/* 
-if ($method == "POST") {
-        
-    $username = $inputData["username"];
-    $password = $inputData["password"];
-
-    for($i = 0; $i < count($users); $i++){
-
-        if ($users[$i]["username"] == $username) {
-            $users[$i]["points"] = $users[$i]["points"] + $inputData["points"];
-            $newpoints = 
-            file_put_contents($userDatabase, json_encode($users, JSON_PRETTY_PRINT));
-            sendJSON(["points" => $users[$i]["points"]]);
-        }
-    }
-}
-
-if ($method == "GET") {
-
-    $highestScores = [];
-    foreach($users as $user){
-        $usernameAndPassword = [
-            "username" => $user["username"],
-            "points" => $user["points"],
-        ];
-        $highestScores[] = $usernameAndPassword;
-    };
-
-    sort($highestScores);
-    sendJSON($highestScores);
-}
-    
-$error = ["error" => "Can't load points"];
-sendJSON($error, 400);
-}
-    $error = ["error" => "Can't load points"];
-    sendJSON($error, 400); 
-    
+/*
     
     fetch("api/points.php", {
                     method: "POST",
