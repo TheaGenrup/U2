@@ -1,8 +1,15 @@
 <?php ini_set("display_errors", 1);
 
-
-require_once "helper_functions.php";
+require_once "help_functions.php";
 allowCORS();
+
+function checkIfCorrect($randomDogFromAlternatives, $dogName){
+    if (str_contains($randomDogFromAlternatives["name"], $dogName)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
@@ -11,73 +18,51 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if (count($originalArrayOfDogs) == 0) {
         sendJSON(["message" => "No images available", 404]);
     }
-    $dogs_json = "dogs.json";
 
-    $NewArrayOfDogs = [];
-    foreach($originalArrayOfDogs as $dog){
-
-        $newName = str_replace([ "_", ".jpg"], " ", $dog);
-        $newDog = [
+    $newArrayOfDogs = array_map(function($originalDog){
+        $newName = str_replace([ "_", ".jpg"], " ", $originalDog);
+        return [
             "name" => trim($newName),
-            "url" => $dog,
+            "url" => $originalDog,
         ];
-        $NewArrayOfDogs[] = $newDog;
-    }
+    }, $originalArrayOfDogs);
 
-    array_splice($NewArrayOfDogs, 0, 2);
-    $encodedData = json_encode($NewArrayOfDogs, JSON_PRETTY_PRINT);
-    file_put_contents($dogs_json, $encodedData);
+    array_splice($newArrayOfDogs, 0, 2);
+    $encodedData = json_encode($newArrayOfDogs, JSON_PRETTY_PRINT);
+    file_put_contents("dogs.json", $encodedData);
 
     $alternatives = [];
-        $i = 0;
-        while (count($alternatives) < 4) {
+    $i = 0;
+    while (count($alternatives) < 4) {
 
-            $random = array_rand($NewArrayOfDogs, 1);
-            $newAlternative = [
-                "name" => $NewArrayOfDogs[$random]["name"],
-                "url" => $NewArrayOfDogs[$random]["url"],
-            ];
-            if (!in_array($newAlternative, $alternatives)) {
-                $alternatives[] = $newAlternative;
-            }
-
-            $i++;
+        $random = array_rand($newArrayOfDogs, 1);
+        $newAlternative = [
+            "name" => $newArrayOfDogs[$random]["name"],
+            "url" => $newArrayOfDogs[$random]["url"],
+        ];
+        if (!in_array($newAlternative, $alternatives)) {
+            $alternatives[] = $newAlternative;
         }
 
-        
-        function checkAnswer($randomDogFromAlternatives, $dogName){
-            if (str_contains($randomDogFromAlternatives["name"], $dogName)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        // få en random dog från alternatives
+        $i++;
+    }
+
     $randomDogFromAlternatives = $alternatives[array_rand($alternatives, 1)];
 
     $dogNames = [];
     foreach($alternatives as $dog) {
         $dogNames[] = [
-            "correct" => checkAnswer($randomDogFromAlternatives, $dog["name"]),
+            "correct" => checkIfCorrect($randomDogFromAlternatives, $dog["name"]),
             "name" => $dog["name"],
         ];
     }
 
-    $alternativesToSend = [
+    sendJSON([
         "image" => "images/" . $randomDogFromAlternatives["url"],
         "alternatives" => $dogNames,
-    ];
-
-
-
-/*     if (!file_exists($alternativesToSend["image"])) {
-        sendJSON(["message" => "You need to use the GET-request method"], 405);
-    } */
-
-
-    sendJSON($alternativesToSend);
+    ]);
 }
-sendJSON(["message" => "You need to use the GET-request method"], 405);
+sendJSON(["message" => "You need to use the GET request method"], 405);
 
 ?>
 

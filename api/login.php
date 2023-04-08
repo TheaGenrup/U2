@@ -1,10 +1,11 @@
 <?php ini_set("display_errors", 1);
 
+require_once "help_functions.php";
+allowCORS();
 
-require_once "helper_functions.php";
-
-
-
+if (!file_exists("users.json")) {
+    sendJSON(["message" => 'The file "users.json" was not found'], 404);
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -20,25 +21,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }  
 
-    for($i=0; $i<count($users); $i++){
+    for ($i = 0; $i < count($users); $i++){
         $user = $users[$i];
 
         if ($username == $user["username"] and $password == $user["password"]) {
-            $points = $user["points"];
+
             $loggedInUser = [
                 "username" => $username,
                 "password" => $password,
-                "points" => $points,
+                "points" => $user["points"],
             ];
 
             sendJSON($loggedInUser);
-        } 
-
-            
-    }  
+        }        
+    }
     sendJSON(["message" => "Not Found"], 404);
 } 
-sendJSON(["message" => "You need to use the POST-request method"], 405);
-
+sendJSON(["message" => "You need to use the POST method"], 405);
 
 ?> 

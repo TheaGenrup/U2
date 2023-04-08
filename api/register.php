@@ -1,6 +1,6 @@
 <?php ini_set("display_errors", 1);
 
-require_once("helper_functions.php");
+require_once("help_functions.php");
 allowCORS();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -32,19 +32,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       }
     }
 
-      $newUser = [
-        "username" => $username,
-        "password" => $password,
-        "points" => 0
-      ];
+    $newUser = [
+      "username" => $username,
+      "password" => $password,
+      "points" => 0
+    ];
 
-      $users[] = $newUser;
+    $users[] = $newUser;
 
-      $encodedData = json_encode($users, JSON_PRETTY_PRINT);
-      file_put_contents($userDatabase, $encodedData);
+    $encodedData = json_encode($users, JSON_PRETTY_PRINT);
+    file_put_contents($userDatabase, $encodedData);
 
-      sendJSON($newUser);
+    sendJSON($newUser);
 
 }
-    sendJSON(["message" => "You need to use the POST-request method"], 405);
+
+sendJSON(["message" => "You need to use the POST-request method"], 405);
 ?>
